@@ -4,8 +4,6 @@
 
 > SERVER : Development Server
 >
-> HOST : localhost | 127.0.0.1
+> HOST : localhost [open](http://localhost:5000) | 127.0.0.1 [open](http://127.0.0.1:5000)
 >
 > PORT : 5000
-
-[open](http://localhost:5000)
