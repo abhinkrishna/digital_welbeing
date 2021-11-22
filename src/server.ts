@@ -30,8 +30,9 @@ initDatabaseConnection(mongoConfig).then(async (connection) => {
     })
 
 }).catch((error) => {
-    console.log('/* Mongo DB connection */');
+    console.log('/* database connection error */');
 })
+
 process.on('uncaughtException', (e) => {
     console.log(e);
 });

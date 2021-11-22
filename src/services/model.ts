@@ -36,5 +36,13 @@ class Model {
         return options;
     }
 
+    public mongoOr = (case1: any, case2: any) => {
+        return { $or: [ case1, case2 ] }
+    }
+
+    public mongoSearchQuery = (query: string) => {
+        return { '$regex' : `${query}`, '$options' : 'i' }
+    }
+
 }
 export default Model;
