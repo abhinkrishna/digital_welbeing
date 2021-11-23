@@ -29,6 +29,13 @@ const restrictionRoutes: Route[] = [
         }
     },
     {
+        path: '/restrictions/schedules/:sid',
+        method: Method.get,
+        controller: async (req: Request, res: Response, next: NextFunction) => {
+            await new RestrictionController(req, res, next).readManyOfSchedule();
+        }
+    },
+    {
         path: '/restrictions/:id',
         method: Method.get,
         controller: async (req: Request, res: Response, next: NextFunction) => {

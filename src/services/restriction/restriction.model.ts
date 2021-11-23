@@ -26,19 +26,32 @@ class RestrictionModel extends Model {
     }
 
     /**
-     * Get many restrictions by pagination and search
+     * Get many restrictions by pagination
      * @param order_by specify the field which should be used for ordering
      * @param order specify the order [ "ASC" | "DESC" ]
      * @param page specify the page number
      * @param size specify the page size
-     * @param query specify search query for [ "name", "email"] field
      * @returns list of restriction records
      */
-    public getManyRecordsByPagination = async (order_by: string, order: string, page: number, size: number, query: string) => {
-        const searchQuery = (query) ? { where: { name: {'$regex' : `${query}`, '$options' : 'i'}}} : {}
+    public getManyRecordsByPagination = async (order_by: string, order: string, page: number, size: number) => {
         return await this.manager.find(this.entity, {
             ...this.paginationOptions(order_by, order, page, size),
-            ...searchQuery
+        });
+    }
+
+    /**
+     * Get many restrictions by pagination of a schedule
+     * @param order_by specify the field which should be used for ordering
+     * @param order specify the order [ "ASC" | "DESC" ]
+     * @param page specify the page number
+     * @param size specify the page size
+     * @returns list of restriction records of a schedule
+     */
+    public getManyRecordsByPaginationOfShedule = async (sid: string, order_by: string, order: string, page: number, size: number) => {
+        const whereClause = { where: { scheduleId: { $eq: `${sid}` }}};
+        return await this.manager.find(this.entity, {
+            ...this.paginationOptions(order_by, order, page, size),
+            ...whereClause
         });
     }
 

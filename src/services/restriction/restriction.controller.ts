@@ -62,9 +62,22 @@ class RestrictionController extends Controller {
      * Get many restriction details with pagination
      */
     public readMany = async () => {
-        const { order_by, order, page, size, query } = this.query;
+        const { order_by, order, page, size } = this.query;
 
-        const result = await (this.model as RestrictionModel).getManyRecordsByPagination(order_by, order, page, size, query);
+        const result = await (this.model as RestrictionModel).getManyRecordsByPagination(order_by, order, page, size);
+        if ( !result ) throw new Exception400('Something went wrong.');
+
+        this.success200({ result }, 'Successfully fetched.');
+    }
+
+    /**
+     * Get many restriction details with pagination of a schedule
+     */
+    public readManyOfSchedule = async () => {
+        const { sid } = this.params;
+        const { order_by, order, page, size } = this.query;
+
+        const result = await (this.model as RestrictionModel).getManyRecordsByPaginationOfShedule(sid, order_by, order, page, size);
         if ( !result ) throw new Exception400('Something went wrong.');
 
         this.success200({ result }, 'Successfully fetched.');
@@ -96,8 +109,8 @@ class RestrictionController extends Controller {
             const schedule: Schedule = await new ScheduleModel().getOneRecordById(restriction.schedule_data) as Schedule;
             if ( !schedule ) throw new Exception400('Cannot verify schedule_data.');
 
+            restriction.scheduleId = restriction.schedule_data;
             delete restriction.schedule_data;
-            restriction.scheduleId = schedule.id;
         }
 
         return restriction as Restriction;

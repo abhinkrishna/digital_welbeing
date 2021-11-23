@@ -1,6 +1,4 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, ObjectIdColumn, UpdateDateColumn } from "typeorm";
-import Schedule from "../schedule/schedule.entity";
-
+import { Column, CreateDateColumn, Entity, ObjectIdColumn, UpdateDateColumn } from "typeorm";
 @Entity('restriction')
 class Restriction {
 
@@ -32,12 +30,11 @@ class Restriction {
     })
     public weekends: number | null;
 
-    @ManyToOne(() => Schedule, schedule => schedule.id, { eager: true, nullable: true })
     @Column({
         type: 'varchar',
         nullable: true,
     })
-    public scheduleId: Schedule;
+    public scheduleId: string;
 
     @CreateDateColumn({
         type: 'timestamptz',
