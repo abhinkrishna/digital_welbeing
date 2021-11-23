@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import Method from "../../types/method";
 import Route from "../../types/route";
+import ScheduleController from "../schedule/schedule.controller";
 import UserController from "./users.controller";
 import { CreateUserDTO, UpdateUserDTO } from "./users.dto";
 
@@ -26,6 +27,13 @@ const userRoutes: Route[] = [
         method: Method.get,
         controller: async (req: Request, res: Response, next: NextFunction) => {
             await new UserController(req, res, next).readMany();
+        }
+    },
+    {
+        path: '/users/:uid/schedules',
+        method: Method.get,
+        controller: async (req: Request, res: Response, next: NextFunction) => {
+            await new ScheduleController(req, res, next).readManyForUser();
         }
     },
     {

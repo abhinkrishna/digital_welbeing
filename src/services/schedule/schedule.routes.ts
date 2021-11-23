@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import Method from "../../types/method";
 import Route from "../../types/route";
+import RestrictionController from "../restriction/restriction.controller";
 import ScheduleController from "./schedule.controller";
 import { CreateScheduleDTO, UpdateScheduleDTO } from "./schedule.dto";
 
@@ -26,6 +27,20 @@ const scheduleRoutes: Route[] = [
         method: Method.get,
         controller: async (req: Request, res: Response, next: NextFunction) => {
             await new ScheduleController(req, res, next).readMany();
+        }
+    },
+    {
+        path: '/schedules/users/:uid',
+        method: Method.get,
+        controller: async (req: Request, res: Response, next: NextFunction) => {
+            await new ScheduleController(req, res, next).readManyForUser();
+        }
+    },
+    {
+        path: '/schedules/:sid/restrictions',
+        method: Method.get,
+        controller: async (req: Request, res: Response, next: NextFunction) => {
+            await new RestrictionController(req, res, next).readManyOfSchedule();
         }
     },
     {

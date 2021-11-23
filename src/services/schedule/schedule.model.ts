@@ -26,19 +26,40 @@ class ScheduleModel extends Model {
     }
 
     /**
-     * Get many schedule records by pagination and search
+     * Get many schedule records by pagination
      * @param order_by specify the field which should be used for ordering
      * @param order specify the order [ "ASC" | "DESC" ]
      * @param page specify the page number
      * @param size specify the page size
-     * @param query specify search query for [ "name", "email" ] field
      * @returns list of schedule records
      */
-    public getManyRecordsByPagination = async (order_by: string, order: string, page: number, size: number, query: string) => {
-        const searchQuery = (query) ? { where: { name: {'$regex' : `${query}`, '$options' : 'i'}}} : {}
+    public getManyRecordsByPagination = async (order_by: string, order: string, page: number, size: number) => {
         return await this.manager.find(this.entity, {
             ...this.paginationOptions(order_by, order, page, size),
-            ...searchQuery
+        });
+    }
+
+    /**
+     * Get many schedule records by pagination of given user id ( uid )
+     * @param uid specify the user id who is also the author of the shedule
+     * @param order_by specify the field which should be used for ordering
+     * @param order specify the order [ "ASC" | "DESC" ]
+     * @param page specify the page number
+     * @param size specify the page size
+     * @returns list of schedule records that matches all the creteria
+     */
+    public getManyRecordsByPaginationForUser = async (uid: string, order_by: string, order: string, page: number, size: number) => {
+        const whereClause = { where: { userId: { $eq: `${uid}` }}};
+        return await this.manager.find(this.entity, {
+            ...this.paginationOptions(order_by, order, page, size),
+            ...whereClause,
+        });
+    }
+
+    public verifyNoOverlaps = async ({ start, end, user_data,  }: any) => {
+        return await this.manager.find(this.entity, { where: {
+
+        }
         });
     }
 

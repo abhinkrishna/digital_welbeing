@@ -1,5 +1,4 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, ObjectIdColumn, UpdateDateColumn } from "typeorm";
-import User from "../users/users.entity";
+import { Column, CreateDateColumn, Entity, ObjectIdColumn, UpdateDateColumn } from "typeorm";
 
 @Entity('schedule')
 class Schedule {
@@ -15,23 +14,22 @@ class Schedule {
     public days: string | null;
 
     @Column({
-        type: 'timestamptz',
+        type: 'varchar',
         nullable: true,
     })
-    public start: Date;
+    public start: string;
 
-    @Column({
-        type: 'timestamptz',
-        nullable: true,
-    })
-    public end: Date;
-
-    @ManyToOne(() => User, user => user.id, { eager: true, nullable: true })
     @Column({
         type: 'varchar',
         nullable: true,
     })
-    public userId: User;
+    public end: string;
+
+    @Column({
+        type: 'varchar',
+        nullable: true,
+    })
+    public userId: string;
 
     @CreateDateColumn({
         type: 'timestamptz',

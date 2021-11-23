@@ -62,9 +62,19 @@ class ScheduleController extends Controller {
      * Get many schedule details with pagination
      */
     public readMany = async () => {
-        const { order_by, order, page, size, query } = this.query;
+        const { order_by, order, page, size } = this.query;
 
-        const result = await (this.model as ScheduleModel).getManyRecordsByPagination(order_by, order, page, size, query);
+        const result = await (this.model as ScheduleModel).getManyRecordsByPagination(order_by, order, page, size);
+        if ( !result ) throw new Exception400('Something went wrong.');
+
+        this.success200({ result }, 'Successfully fetched.');
+    }
+
+    public readManyForUser = async () => {
+        const { uid } = this.params;
+        const { order_by, order, page, size } = this.query;
+
+        const result = await (this.model as ScheduleModel).getManyRecordsByPaginationForUser(uid, order_by, order, page, size);
         if ( !result ) throw new Exception400('Something went wrong.');
 
         this.success200({ result }, 'Successfully fetched.');
@@ -91,14 +101,20 @@ class ScheduleController extends Controller {
      * @returns 
      */
     private proccessData = async ( schedule: Schedule | CreateScheduleDTO | UpdateScheduleDTO | any ) => {
+
+        if ( schedule.start && schedule.end && false ) {
+            const scheduleData = await (this.model as ScheduleModel).verifyNoOverlaps(schedule);
+            if ( scheduleData ) throw new Exception400('Already has some ');
+        }
+
         if ( schedule.user_data ) {
 
             // Verify user data
             const user: User = await new UserModel().getOneRecordById(schedule.user_data) as User;
             if ( !user ) throw new Exception400('Cannot verify user_data.');
 
+            schedule.userId = schedule.user_data;
             delete schedule.user_data;
-            schedule.userId = user.id;
         }
 
         return schedule as Schedule;
